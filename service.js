@@ -55,9 +55,10 @@ const recuperarMaiorMenorLancamentos = (cpf, lancamentos) => {
   const lancamentosFiltrados = lancamentos.filter(lancamento => lancamento.cpf === cpf)
 
   if (lancamentosFiltrados.length === 0) return []
-  if (lancamentosFiltrados.length === 1) return [lancamentosFiltrados, lancamentosFiltrados]
+  if (lancamentosFiltrados.length === 1) return [lancamentosFiltrados[0], lancamentosFiltrados[0]]
 
-  return lancamentosFiltrados.sort((a, b) => a.valor - b.valor)
+  const lancamentosOrdenados = lancamentosFiltrados.sort((a, b) => a.valor - b.valor)
+  return [lancamentosOrdenados[0], lancamentosOrdenados[lancamentosOrdenados.length - 1]]
 }
 
 const recuperarMaioresSaldos = (lancamentos) => {
