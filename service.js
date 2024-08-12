@@ -6,8 +6,8 @@ const validarEntradaDeDados = (lancamento) => {
     return "CPF deve conter apenas caracteres numéricos e ter 11 dígitos."
   }
 
-  if (typeof Number(valor) !== 'number' || isNaN(valor)) {
-    return "Valor deve ser numérico."
+  if (typeof valor !== 'number' || isNaN(valor)) {
+    return "Valor deve ser numérico e diferente de 0."
   }
 
   if (Number(valor) > 15000) {
@@ -62,9 +62,23 @@ const recuperarMaiorMenorLancamentos = (cpf, lancamentos) => {
 }
 
 const recuperarMaioresSaldos = (lancamentos) => {
-  return lancamentos
+
+  return recuperarSaldosPorConta(lancamentos)
+    .sort((a, b) => b.valor - a.valor).slice(0, 3)
 }
 
 const recuperarMaioresMedias = (lancamentos) => {
-  return lancamentos
+
+  const cpfs = Array.from(new Set(lancamentos.map(lancamento => lancamento.cpf)))
+
+  const medias = cpfs.map(cpf => {
+    const lancamentosCpf = lancamentos.filter(lancamento => lancamento.cpf === cpf)
+    const media = lancamentosCpf
+      .reduce((acc, lancamento) => acc + lancamento.valor, 0) / lancamentosCpf.length
+    return {cpf, valor: media}
+  })
+
+  return medias
+    .sort((a, b) => b.valor - a.valor)
+    .slice(0, 3)
 }
